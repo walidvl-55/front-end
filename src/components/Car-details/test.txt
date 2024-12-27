@@ -1,0 +1,210 @@
+import React from "react";
+import { LineChart } from "@mui/x-charts/LineChart";
+import Split from "../Split";
+const CarDetails = () => {
+  const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490, 2000, 2780, 1890, 2390, 3490];
+  const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300, 9800, 3908, 4800, 3800, 4300];
+  const vpData = [4000, 3010, 5000, 3780, 1890, 2390, 3490, 5000, 3780, 1890, 2390, 3490];
+  const uvData = [1232, 3123, 9800, 3908, 4800, 3800, 4300 , 5000, 3780, 1890, 2390, 3490];
+  const xLabels = [
+    "500",
+    "1000",
+    "1500",
+    "2000",
+    " 2500",
+    "3000",
+    "3500",
+    "4000",
+    "4500",
+    "5000",
+    "5500",
+    "6000",
+
+  ];
+
+  return (
+    <section className="sub-bg ">
+      <div className="container">
+        <div className="row ">
+          <div className="col-md-8 mt-50">
+          <div
+                    key="1"
+                    className="col-md-3 col-6 brands"
+                  >
+                    <div
+                      className="item wow fadeIn"
+                      data-wow-delay=".3s"
+                    >
+                      <div className="img">
+                          <img src="" alt="" />
+
+                        <Split>
+                          <a
+                            href="#0"
+                            className="link words chars splitting"
+                            data-splitting
+                          >
+                           sdqijkjk
+                          </a>
+                        </Split>
+                      </div>
+                    </div>
+                  </div>
+            <h4>Alfa Romeo 147 1.9 JTD - 120-BHP - 89-KW</h4>
+            <h6 className="mb-70">
+              Geschätzte %:Leistung mehr Leistung und %:Drehmoment mehr
+              Drehmoment
+            </h6>
+          </div>
+          <div className="col-md-6 mt-40 ">
+            <table className="table table-bordered text-center">
+              <thead>
+                <tr style={{ backgroundColor: "#f0f0f0" }}>
+                  <th>Parameter</th>
+                  <th>Title 1</th>
+                  <th>Title 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ backgroundColor: "#f0f0f0" }}>
+                  <th>Row 1</th>
+                  <td style={{ backgroundColor: "#e0f7fa" }}>100</td>
+                  <td style={{ backgroundColor: "#ffe0b2" }}>200</td>
+                </tr>
+                <tr style={{ backgroundColor: "#f0f0f0" }}>
+                  <th>Row 2</th>
+                  <td style={{ backgroundColor: "#e0f7fa" }}>300</td>
+                  <td style={{ backgroundColor: "#ffe0b2" }}>400</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Line Chart on the left side */}
+          <div className="col-md-6 ml-60 mt-30">
+            <LineChart
+              width={500}
+              height={350}
+              series={[
+                { curve: "linear", data: pData, label: "OEM Power" },
+                { curve: "linear", data: uData, label: "OEM Torque" },
+                { curve: "linear", data: vpData, label: "Stage 1 Power" },
+                { curve: "linear", data: uvData, label: "Stage 1 Torque" },
+              ]}
+              xAxis={[{ scaleType: "point", data: xLabels }]}
+            />
+          </div>
+
+          {/* Table on the right side */}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default CarDetails;
+import React from "react";
+import { LineChart } from "@mui/x-charts/LineChart";
+import Split from "../Split";
+const CarDetails = () => {
+  const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490, 2000, 2780, 1890, 2390, 3490];
+  const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300, 9800, 3908, 4800, 3800, 4300];
+  const vpData = [4000, 3010, 5000, 3780, 1890, 2390, 3490, 5000, 3780, 1890, 2390, 3490];
+  const uvData = [1232, 3123, 9800, 3908, 4800, 3800, 4300 , 5000, 3780, 1890, 2390, 3490];
+  const xLabels = [
+    "500",
+    "1000",
+    "1500",
+    "2000",
+    " 2500",
+    "3000",
+    "3500",
+    "4000",
+    "4500",
+    "5000",
+    "5500",
+    "6000",
+
+  ];
+
+  return (
+    <section className="sub-bg ">
+      <div className="container">
+        <div className="row ">
+          <div className="col-md-8 mt-50">
+          <div
+                    key="1"
+                    className="col-md-3 col-6 brands"
+                  >
+                    <div
+                      className="item wow fadeIn"
+                      data-wow-delay=".3s"
+                    >
+                      <div className="img">
+                          <img src="" alt="" />
+
+                        <Split>
+                          <a
+                            href="#0"
+                            className="link words chars splitting"
+                            data-splitting
+                          >
+                           sdqijkjk
+                          </a>
+                        </Split>
+                      </div>
+                    </div>
+                  </div>
+            <h4>Alfa Romeo 147 1.9 JTD - 120-BHP - 89-KW</h4>
+            <h6 className="mb-70">
+              Geschätzte %:Leistung mehr Leistung und %:Drehmoment mehr
+              Drehmoment
+            </h6>
+          </div>
+          <div className="col-md-6 mt-40 ">
+            <table className="table table-bordered text-center">
+              <thead>
+                <tr style={{ backgroundColor: "#f0f0f0" }}>
+                  <th>Parameter</th>
+                  <th>Title 1</th>
+                  <th>Title 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style={{ backgroundColor: "#f0f0f0" }}>
+                  <th>Row 1</th>
+                  <td style={{ backgroundColor: "#e0f7fa" }}>100</td>
+                  <td style={{ backgroundColor: "#ffe0b2" }}>200</td>
+                </tr>
+                <tr style={{ backgroundColor: "#f0f0f0" }}>
+                  <th>Row 2</th>
+                  <td style={{ backgroundColor: "#e0f7fa" }}>300</td>
+                  <td style={{ backgroundColor: "#ffe0b2" }}>400</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Line Chart on the left side */}
+          <div className="col-md-6 ml-60 mt-30">
+            <LineChart
+              width={500}
+              height={350}
+              series={[
+                { curve: "linear", data: pData, label: "OEM Power" },
+                { curve: "linear", data: uData, label: "OEM Torque" },
+                { curve: "linear", data: vpData, label: "Stage 1 Power" },
+                { curve: "linear", data: uvData, label: "Stage 1 Torque" },
+              ]}
+              xAxis={[{ scaleType: "point", data: xLabels }]}
+            />
+          </div>
+
+          {/* Table on the right side */}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default CarDetails;

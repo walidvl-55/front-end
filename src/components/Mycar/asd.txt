@@ -1,0 +1,351 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Link from "next/link";
+
+const Mycar = () => {
+  const [categories, setCategories] = useState([]); // Default to an empty array
+  const [brands, setBrands] = useState([]); // Default to an empty array
+  const [models, setModels] = useState([]); // Default to an empty array
+  const [generations, setGenerations] = useState([]); // Default to an empty array
+  const [engines, setEngines] = useState([]); // Default to an empty array
+  const [ecus, setEcus] = useState([]); // Default to an empty array
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
+  const [selectedGeneration, setSelectedGeneration] = useState(null);
+  const [selectedEngine, setSelectedEngine] = useState(null);
+  const [selectedEcu, setSelectedEcu] = useState(null);
+  const [buttonEnabled, setButtonEnabled] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      setSelectedCategory(localStorage.getItem("category_id") || null);
+      setSelectedBrand(localStorage.getItem("brand_id") || null);
+      setSelectedModel(localStorage.getItem("model_id") || null);
+      setSelectedGeneration(localStorage.getItem("generation_id") || null);
+      setSelectedEngine(localStorage.getItem("engine_id") || null);
+      setSelectedEcu(localStorage.getItem("ecu_id") || null);
+    }
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/api/vehicle/categories")
+      .then((response) => {
+        setCategories(response.data.categories || []);
+        setBrands(response.data.brands || []);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories and brands:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setSelectedBrand(null);
+    setModels([]);
+    setGenerations([]);
+    setEngines([]);
+    setEcus([]);
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("category_id", categoryId);
+      console.log("Saved category_id to localStorage:", categoryId);
+    }
+    if (categoryId) {
+      axios
+        .get("http://127.0.0.1:8000/api/vehicles/names", {
+          params: { category_id: categoryId },
+        })
+        .then((response) => {
+          setBrands(response.data || []);
+        })
+        .catch((error) => {
+          console.error("Error fetching brands:", error);
+        });
+    }
+  };
+
+  const handleBrandChange = (brandId) => {
+    setSelectedBrand(brandId);
+    setModels([]);
+    setGenerations([]);
+    setEngines([]);
+    setEcus([]);
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("brand_id", brandId);
+      console.log("Saved brand_id to localStorage:", brandId);
+    }
+    if (brandId && selectedCategory) {
+      const requestData = { brand_id: brandId, category_id: selectedCategory };
+      axios
+        .get("http://127.0.0.1:8000/api/vehicles/models", {
+          params: requestData,
+        })
+        .then((response) => {
+          setModels(response.data || []);
+        })
+        .catch((error) => {
+          console.error("Error fetching models:", error);
+        });
+    }
+  };
+
+  const handleModelChange = (modelId) => {
+    setSelectedModel(modelId);
+    setGenerations([]);
+    setEngines([]);
+    setEcus([]);
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("model_id", modelId);
+      console.log("Saved model_id to localStorage:", modelId);
+    }
+    if (modelId) {
+      axios
+        .get("http://127.0.0.1:8000/api/vehicles/generations", {
+          params: { model_id: modelId },
+        })
+        .then((response) => {
+          setGenerations(response.data || []);
+        })
+        .catch((error) => {
+          console.error("Error fetching generations:", error);
+        });
+    }
+  };
+
+  const handleGenerationChange = (generationId) => {
+    setSelectedGeneration(generationId);
+    setEngines([]);
+    setEcus([]);
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("generation_id", generationId);
+      console.log("Saved generation_id to localStorage:", generationId);
+    }
+    if (generationId && selectedModel) {
+      axios
+        .get("http://127.0.0.1:8000/api/vehicles/engines", {
+          params: {
+            generation_id: generationId,
+            model_id: selectedModel,
+            brand_id: selectedBrand,
+            category_id: selectedCategory,
+          },
+        })
+        .then((response) => {
+          setEngines(response.data || []);
+        })
+        .catch((error) => {
+          console.error("Error fetching engines:", error);
+        });
+    }
+  };
+
+  const handleEngineChange = (engineId) => {
+    setSelectedEngine(engineId);
+    setEcus([]);
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("engine_id", engineId);
+      console.log("Saved engine_id to localStorage:", engineId);
+    }
+    if (engineId && selectedGeneration) {
+      axios
+        .get("http://127.0.0.1:8000/api/vehicles/ecus", {
+          params: {
+            engine_id: engineId,
+            generation_id: selectedGeneration,
+            model_id: selectedModel,
+            brand_id: selectedBrand,
+            category_id: selectedCategory,
+          },
+        })
+        .then((response) => {
+          setEcus(response.data || []);
+          setButtonEnabled(response.data.length > 0);
+        })
+        .catch((error) => {
+          console.error("Error fetching ECUs:", error);
+        });
+    }
+  };
+
+  const handleEcuChange = (ecuId) => {
+    setSelectedEcu(ecuId);
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("ecu_id", ecuId);
+      console.log("Saved ecu_id to localStorage:", ecuId);
+    }
+  };
+
+  return (
+    <section
+      className="call-action section-padding sub-bg bg-img"
+      style={{
+        backgroundImage: `url("/img/patrn.svg")`,
+        marginTop: "-100px",
+      }}
+    >
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8 col-lg-9">
+            <div className="content sm-mb30">
+              <h2 className="wow words chars splitting" data-splitting>
+                Konfigurator <br />
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+          {loading ? (
+            <p>Loading categories...</p>
+          ) : (
+            categories.map((category) => (
+              <div
+                key={category.category_id}
+                className="col-sm-6 col-md-4 col-lg-2 valign mb-5 mt-5"
+              >
+                <div className="d-flex flex-column align-items-center">
+                  <img
+                    src={`/img/${category.category_name}.png`}
+                    alt={`${category.category_name} Icon`}
+                    className="img-fluid"
+                  />
+                  <div
+                    className={`butn bord curve wow fadeInUp ${
+                      selectedCategory === category.category_id
+                        ? "selected"
+                        : ""
+                    }`}
+                    data-wow-delay=".5s"
+                    onClick={() => handleCategoryChange(category.category_id)}
+                  >
+                    <span>{category.category_name}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="row mb-5 mt-70">
+          <div className="col-12">
+            <div className="row">
+              {selectedCategory && (
+                <div className="col-lg-4 col-md-6 col-12 mb-3 position-relative">
+                  <select
+                    className="form-select border-radius-custom"
+                    disabled={loading || !brands.length}
+                    onChange={(e) => handleBrandChange(e.target.value)}
+                  >
+                    <option value="" disabled selected hidden>
+                      Marke ausw&auml;hlen
+                    </option>
+                    {brands.map((brand) => (
+                      <option key={brand.brand_id} value={brand.brand_id}>
+                        {brand.brand_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {selectedBrand && (
+                <div className="col-lg-4 col-md-6 col-12 mb-3">
+                  <select
+                    className="form-select border-radius-custom"
+                    disabled={loading || !models.length}
+                    onChange={(e) => handleModelChange(e.target.value)}
+                  >
+                    <option value="" disabled selected hidden>
+                      Modell ausw&auml;hlen
+                    </option>
+                    {models.map((model) => (
+                      <option key={model.model_id} value={model.model_id}>
+                        {model.model_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {selectedModel && (
+                <div className="col-lg-4 col-md-6 col-12 mb-3">
+                  <select
+                    className="form-select border-radius-custom"
+                    disabled={loading || !generations.length}
+                    onChange={(e) => handleGenerationChange(e.target.value)}
+                  >
+                    <option value="" disabled selected hidden>
+                      Generation ausw&auml;hlen
+                    </option>
+                    {generations.map((generation) => (
+                      <option
+                        key={generation.generation_id}
+                        value={generation.generation_id}
+                      >
+                        {generation.generation_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {selectedGeneration && (
+                <div className="col-lg-4 col-md-6 col-12 mb-3">
+                  <select
+                    className="form-select border-radius-custom"
+                    disabled={loading || !engines.length}
+                    onChange={(e) => handleEngineChange(e.target.value)}
+                  >
+                    <option value="" disabled selected hidden>
+                      Motor ausw&auml;hlen
+                    </option>
+                    {engines.map((engine) => (
+                      <option key={engine.engine_id} value={engine.engine_id}>
+                        {engine.engine_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {selectedEngine && (
+                <div className="col-lg-4 col-md-6 col-12 mb-3">
+                  <select
+                    className="form-select border-radius-custom"
+                    disabled={loading || !ecus.length}
+                    onChange={(e) => handleEcuChange(e.target.value)}
+                  >
+                    <option value="" disabled selected hidden>
+                      ECU ausw&auml;hlen
+                    </option>
+                    {ecus.map((ecu) => (
+                      <option key={ecu.ecu_id} value={ecu.ecu_id}>
+                        {ecu.ecu_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="col-12 mt-4 text-center">
+                <Link
+                  className={`btn btn-primary ${!buttonEnabled ? 'disabled' : ''}`}
+                  href="#"
+                  disabled={!buttonEnabled}
+                >
+                  Jetzt konfigurieren
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Mycar;

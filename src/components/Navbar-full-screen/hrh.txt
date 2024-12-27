@@ -1,0 +1,31 @@
+import React, { useEffect, useState } from "react";
+import Navbar from "./Navbar"; // Import your first navbar
+import NavbarFullMenu from "./NavbarFullMenu"; // Import your second navbar
+
+const ResponsiveNavbar = ({ lr, nr, theme }) => {
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768); // Set your breakpoint
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize); // Cleanup on unmount
+    };
+  }, []);
+
+  return (
+    <>
+      {isLargeScreen ? (
+        <Navbar lr={lr} nr={nr} theme={theme} />
+      ) : (
+        <NavbarFullMenu theme={theme} />
+      )}
+    </>
+  );
+};
+
+export default ResponsiveNavbar;
